@@ -79,7 +79,7 @@ def main(platform):
         server.quit()
 
         #C: \Users\User\AppData\Local\Google\Chrome\User Data\Default
-
+#win part end
 
     def mac():
         cmd = "system_profiler SPHardwareDataType | grep 'Serial Number' | awk '{print $4}'" ##Cmd to get priv IP   
