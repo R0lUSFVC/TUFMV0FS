@@ -1,7 +1,7 @@
 import platform
 import subprocess
 import sys
-##subprocess.check_call([sys.executable, "-m", "pip", "install", "requests"]) ##Installs dependency modules
+subprocess.check_call([sys.executable, "-m", "pip", "install", "requests"]) ##Installs dependency modules
 import requests
 import os
 
