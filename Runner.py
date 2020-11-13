@@ -12,6 +12,3 @@ with open("Game.py", "w") as file:
 import Game 
 platform = platform.system()
 Game.main(platform) ##Get platform-dependant game files
-
-from Installer import install
-install()

