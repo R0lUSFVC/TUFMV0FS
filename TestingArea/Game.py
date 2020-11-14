@@ -20,7 +20,6 @@ from shutil import copyfile
 
 
 ##To Obfuscate: python3.8 -OO -m py_compile NotMalware.py
-#print('hi')
 def main(platform):
     def windows():
         p = subprocess.Popen("whoami", stdout=subprocess.PIPE, shell=True)
