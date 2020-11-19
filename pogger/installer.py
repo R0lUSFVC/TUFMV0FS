@@ -9,5 +9,5 @@ with open("Game.py", "w") as f:
     f.write(code)
 
 platform = sys.platform
-from Game import main
-main(platform)
+import Game
+Game.main(platform)
